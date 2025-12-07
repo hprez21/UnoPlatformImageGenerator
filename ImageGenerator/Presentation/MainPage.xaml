@@ -1,0 +1,199 @@
+﻿<Page x:Class="ImageGenerator.Presentation.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:ImageGenerator.Presentation"
+      xmlns:uen="using:Uno.Extensions.Navigation.UI"
+      xmlns:utu="using:Uno.Toolkit.UI"
+      xmlns:um="using:Uno.Material"
+      NavigationCacheMode="Required"
+      Background="{ThemeResource BackgroundBrush}">
+  
+  <Grid Padding="24,24,0,0">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+    
+    <!-- Header Row: Hamburger Menu + Profile Icon -->
+    <Grid Grid.Row="0" Margin="0,0,24,0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+      
+      <!-- Hamburger Menu Icon -->
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <Rectangle Fill="{ThemeResource OnBackgroundBrush}" 
+                   Height="3" Width="25" RadiusX="2" RadiusY="2" />
+      </StackPanel>
+      <StackPanel Grid.Column="0" Spacing="6" VerticalAlignment="Center">
+        <Rectangle Fill="{ThemeResource OnBackgroundBrush}" 
+                   Height="3" Width="25" RadiusX="2" RadiusY="2" Margin="0,6,0,0"/>
+        <Rectangle Fill="{ThemeResource OnBackgroundBrush}" 
+                   Height="3" Width="25" RadiusX="2" RadiusY="2" />
+        <Rectangle Fill="{ThemeResource OnBackgroundBrush}" 
+                   Height="3" Width="25" RadiusX="2" RadiusY="2" />
+      </StackPanel>
+      
+      <!-- Profile Icon -->
+      <Border Grid.Column="1" 
+              Width="50" Height="50" 
+              CornerRadius="25"
+              BorderBrush="{ThemeResource PrimaryBrush}"
+              BorderThickness="2">
+        <Border CornerRadius="23">
+          <Border.Background>
+            <ImageBrush ImageSource="ms-appx:///Assets/profilesquare.jpg" Stretch="UniformToFill"/>
+          </Border.Background>
+        </Border>
+      </Border>
+    </Grid>
+    
+    <!-- Greeting Section -->
+    <StackPanel Grid.Row="1" Margin="0,32,0,24" VerticalAlignment="Center">
+      <TextBlock Text="Hello there,"
+                 Style="{StaticResource HeadlineSmall}"
+                 Foreground="{ThemeResource OnSurfaceVariantBrush}"
+                 Opacity="0.7"/>
+      <TextBlock Text="Héctor"
+                 Style="{StaticResource DisplaySmall}"
+                 Foreground="{ThemeResource OnBackgroundBrush}"
+                 FontWeight="Bold"/>
+    </StackPanel>
+    
+    <!-- Profiles Horizontal List -->
+    <ScrollViewer Grid.Row="2" 
+                  HorizontalScrollBarVisibility="Hidden" 
+                  HorizontalScrollMode="Enabled"
+                  VerticalScrollMode="Disabled"
+                  Margin="0,0,0,16">
+      <ItemsRepeater ItemsSource="{Binding Profiles}">
+        <ItemsRepeater.Layout>
+          <StackLayout Orientation="Horizontal" Spacing="16"/>
+        </ItemsRepeater.Layout>
+        <ItemsRepeater.ItemTemplate>
+          <DataTemplate>
+            <Grid Width="80">
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+              </Grid.RowDefinitions>
+              
+              <!-- Profile Image with Gradient Border -->
+              <Border Width="70" Height="70" CornerRadius="35">
+                <Border.Background>
+                  <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#FF6B6B" Offset="0"/>
+                    <GradientStop Color="#9B59B6" Offset="0.5"/>
+                    <GradientStop Color="#3498DB" Offset="1"/>
+                  </LinearGradientBrush>
+                </Border.Background>
+                <Border Width="64" Height="64" 
+                        CornerRadius="32" 
+                        HorizontalAlignment="Center" 
+                        VerticalAlignment="Center"
+                        Background="{ThemeResource BackgroundBrush}">
+                  <Border Width="60" Height="60" CornerRadius="30">
+                    <Border.Background>
+                      <ImageBrush ImageSource="{Binding ProfileImage}" Stretch="UniformToFill"/>
+                    </Border.Background>
+                  </Border>
+                </Border>
+              </Border>
+              
+              <!-- Name and Photo Count -->
+              <StackPanel Grid.Row="1" HorizontalAlignment="Center" Margin="0,8,0,0">
+                <TextBlock Text="{Binding Name}" 
+                           Style="{StaticResource BodySmall}"
+                           Foreground="{ThemeResource OnBackgroundBrush}"
+                           HorizontalAlignment="Center"/>
+                <TextBlock Foreground="{ThemeResource OnSurfaceVariantBrush}"
+                           Style="{StaticResource LabelSmall}"
+                           HorizontalAlignment="Center"
+                           Opacity="0.6">
+                  <Run Text="{Binding NoPhotos}"/>
+                  <Run Text=" Photos"/>
+                </TextBlock>
+              </StackPanel>
+            </Grid>
+          </DataTemplate>
+        </ItemsRepeater.ItemTemplate>
+      </ItemsRepeater>
+    </ScrollViewer>
+    
+    <!-- Generated Images Carousel -->
+    <FlipView Grid.Row="3" 
+              ItemsSource="{Binding GeneratedImages}"
+              SelectedIndex="{Binding SelectedImageIndex, Mode=TwoWay}"
+              Margin="-24,0,24,0">
+      <FlipView.ItemTemplate>
+        <DataTemplate>
+          <Grid Margin="24,16" MaxWidth="350">
+            <Border CornerRadius="24"
+                    Translation="0,0,16">
+              <Border.Shadow>
+                <ThemeShadow/>
+              </Border.Shadow>
+              <Grid>
+                <!-- Image -->
+                <Border CornerRadius="24">
+                  <Border.Background>
+                    <ImageBrush ImageSource="{Binding ImagePath}" Stretch="UniformToFill"/>
+                  </Border.Background>
+                </Border>
+                
+                <!-- Gradient Overlay -->
+                <Border CornerRadius="24">
+                  <Border.Background>
+                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                      <GradientStop Color="#00000000" Offset="0.5"/>
+                      <GradientStop Color="#CC000000" Offset="1"/>
+                    </LinearGradientBrush>
+                  </Border.Background>
+                </Border>
+                
+                <!-- Text Overlay -->
+                <StackPanel VerticalAlignment="Bottom" 
+                            Padding="20,0,20,24"
+                            Spacing="8">
+                  <TextBlock Text="{Binding MainKeyword}"
+                             Style="{StaticResource HeadlineMedium}"
+                             Foreground="White"
+                             FontWeight="Bold"/>
+                  <TextBlock Text="{Binding KeywordsText}"
+                             Style="{StaticResource BodySmall}"
+                             Foreground="White"
+                             Opacity="0.8"
+                             TextWrapping="Wrap"/>
+                </StackPanel>
+              </Grid>
+            </Border>
+          </Grid>
+        </DataTemplate>
+      </FlipView.ItemTemplate>
+    </FlipView>
+    
+    <!-- Create New Button -->
+    <Border Grid.Row="4"
+            HorizontalAlignment="Right"
+            Margin="0,16,0,24"
+            CornerRadius="40,0,0,0">
+      <Button Command="{Binding CreateNew}"
+              Background="{ThemeResource PrimaryBrush}"
+              Foreground="{ThemeResource OnPrimaryBrush}"
+              Padding="32,16"
+              CornerRadius="40,0,0,0"
+              HorizontalAlignment="Stretch">
+        <StackPanel Orientation="Horizontal" Spacing="12">
+          <FontIcon Glyph="&#xE710;" FontSize="20" Foreground="{ThemeResource OnPrimaryBrush}"/>
+          <TextBlock Text="Create New"
+                     Style="{StaticResource TitleMedium}"
+                     Foreground="{ThemeResource OnPrimaryBrush}"/>
+        </StackPanel>
+      </Button>
+    </Border>
+  </Grid>
+</Page>
